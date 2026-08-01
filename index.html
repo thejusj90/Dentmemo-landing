@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>DentMemo — Patient records for dental clinics</title>
+<meta name="description" content="Every patient, every visit, found in a second. DentMemo replaces the Excel sheet and the WhatsApp photo folder with one place your whole clinic can trust."/>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#F7F8F6;
+  --paper-dim:#EEF1EE;
+  --ink:#10231F;
+  --ink-soft:#4B5E58;
+  --teal:#0D9488;
+  --teal-d:#0A7970;
+  --amber:#D9A441;
+  --border:#DCE3DF;
+  --card:#FFFFFF;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{animation-duration:.01ms !important;transition-duration:.01ms !important}}
+body{background:var(--paper);color:var(--ink);font-family:'Inter',sans-serif;line-height:1.5;-webkit-font-smoothing:antialiased}
+.mono{font-family:'IBM Plex Mono',monospace}
+h1,h2,h3,.display{font-family:'Space Grotesk',sans-serif;letter-spacing:-0.01em}
+a{color:inherit;text-decoration:none}
+.wrap{max-width:1120px;margin:0 auto;padding:0 24px}
+::selection{background:var(--teal);color:#fff}
+
+/* focus visibility */
+a:focus-visible,button:focus-visible,input:focus-visible{outline:2px solid var(--teal);outline-offset:3px;border-radius:4px}
+
+/* NAV */
+nav{position:sticky;top:0;z-index:100;background:rgba(247,248,246,.85);backdrop-filter:blur(10px);border-bottom:1px solid var(--border)}
+.nav-inner{display:flex;align-items:center;justify-content:space-between;padding:16px 24px;max-width:1120px;margin:0 auto}
+.brand{display:flex;align-items:center;gap:10px;font-weight:700;font-size:18px}
+.brand .mark{width:30px;height:30px;border-radius:8px;background:linear-gradient(135deg,var(--teal),var(--teal-d));display:flex;align-items:center;justify-content:center;color:#fff;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:15px}
+.nav-links{display:flex;align-items:center;gap:28px;font-size:14px;font-weight:500;color:var(--ink-soft)}
+.nav-links a:hover{color:var(--ink)}
+.btn{display:inline-flex;align-items:center;gap:6px;padding:10px 20px;border-radius:9px;font-weight:600;font-size:14px;border:1px solid transparent;cursor:pointer;transition:transform .15s ease,box-shadow .15s ease}
+.btn-primary{background:var(--teal);color:#fff;box-shadow:0 1px 2px rgba(13,148,136,.2)}
+.btn-primary:hover{transform:translateY(-1px);box-shadow:0 6px 16px rgba(13,148,136,.28)}
+.btn-ghost{border-color:var(--border);color:var(--ink)}
+.btn-ghost:hover{border-color:var(--teal);color:var(--teal)}
+
+/* HERO */
+.hero{padding:84px 0 60px}
+.hero-inner{display:grid;grid-template-columns:1.05fr .95fr;gap:56px;align-items:center}
+.eyebrow{font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--teal-d);background:rgba(13,148,136,.09);border:1px solid rgba(13,148,136,.2);display:inline-block;padding:5px 10px;border-radius:6px;margin-bottom:20px}
+h1{font-size:46px;line-height:1.08;font-weight:700;margin-bottom:20px}
+h1 em{font-style:normal;color:var(--teal-d)}
+.hero p.lead{font-size:17px;color:var(--ink-soft);max-width:46ch;margin-bottom:30px}
+.hero-cta{display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+.hero-note{margin-top:14px;font-size:13px;color:var(--ink-soft)}
+
+/* SEARCH DEMO — signature element */
+.demo-card{background:var(--card);border:1px solid var(--border);border-radius:16px;box-shadow:0 20px 50px -20px rgba(16,35,31,.18);overflow:hidden}
+.demo-head{background:linear-gradient(135deg,var(--teal),var(--teal-d));padding:14px 18px;display:flex;align-items:center;gap:8px}
+.demo-dot{width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,.5)}
+.demo-title{color:#fff;font-size:12px;font-weight:600;margin-left:4px;font-family:'IBM Plex Mono',monospace;letter-spacing:.03em}
+.demo-body{padding:20px}
+.demo-search{display:flex;align-items:center;gap:8px;border:1.5px solid var(--border);border-radius:10px;padding:10px 12px;background:var(--paper-dim)}
+.demo-search svg{flex-shrink:0;color:var(--ink-soft)}
+.demo-search-text{font-family:'IBM Plex Mono',monospace;font-size:14px;color:var(--ink)}
+.demo-search-text .cursor{display:inline-block;width:2px;height:15px;background:var(--teal);vertical-align:-3px;animation:blink 1s step-end infinite}
+@keyframes blink{50%{opacity:0}}
+.demo-result{margin-top:14px;border:1px solid var(--border);border-radius:12px;padding:14px;opacity:0;transform:translateY(6px);animation:reveal .5s ease forwards;animation-delay:1.8s}
+@keyframes reveal{to{opacity:1;transform:translateY(0)}}
+.demo-result-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px}
+.demo-name{font-weight:700;font-size:15px}
+.demo-id{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--ink-soft);background:var(--paper-dim);padding:2px 7px;border-radius:5px}
+.demo-visits{display:flex;flex-direction:column;gap:8px}
+.demo-visit{display:flex;justify-content:space-between;font-size:12.5px;padding:8px 10px;background:var(--paper-dim);border-radius:8px}
+.demo-visit .t{color:var(--ink-soft)}
+.demo-visit .v{font-weight:600}
+
+/* SECTION generic */
+section{padding:72px 0}
+.section-head{max-width:640px;margin-bottom:44px}
+.section-head .eyebrow{margin-bottom:14px}
+.section-head h2{font-size:30px;font-weight:700;margin-bottom:12px}
+.section-head p{color:var(--ink-soft);font-size:15.5px}
+
+/* PROBLEM STRIP */
+.problem{background:var(--ink);color:var(--paper)}
+.problem .section-head p{color:rgba(247,248,246,.68)}
+.problem-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:rgba(247,248,246,.14);border:1px solid rgba(247,248,246,.14);border-radius:14px;overflow:hidden}
+.problem-card{background:var(--ink);padding:26px}
+.problem-card .tag{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--amber);letter-spacing:.05em;margin-bottom:10px;display:block}
+.problem-card h3{font-size:16px;font-weight:600;margin-bottom:8px;color:#fff}
+.problem-card p{font-size:13.5px;color:rgba(247,248,246,.6)}
+
+/* HOW IT WORKS */
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:28px}
+.step{position:relative;padding-top:8px}
+.step .num{font-family:'Space Grotesk',sans-serif;font-size:13px;font-weight:700;color:var(--teal-d);background:rgba(13,148,136,.1);width:30px;height:30px;border-radius:8px;display:flex;align-items:center;justify-content:center;margin-bottom:16px}
+.step h3{font-size:17px;font-weight:700;margin-bottom:8px}
+.step p{font-size:14px;color:var(--ink-soft)}
+
+/* FEATURES */
+.features{background:var(--card);border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
+.feat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--border);border:1px solid var(--border);border-radius:14px;overflow:hidden}
+.feat{background:var(--card);padding:26px}
+.feat .ic{width:36px;height:36px;border-radius:9px;background:var(--paper-dim);display:flex;align-items:center;justify-content:center;margin-bottom:14px;color:var(--teal-d)}
+.feat h3{font-size:15.5px;font-weight:700;margin-bottom:7px}
+.feat p{font-size:13.5px;color:var(--ink-soft)}
+
+/* CTA */
+.cta{text-align:center;padding:90px 0}
+.cta h2{font-size:32px;margin-bottom:12px}
+.cta p{color:var(--ink-soft);margin-bottom:28px;font-size:15.5px}
+
+footer{border-top:1px solid var(--border);padding:32px 0}
+.foot-inner{display:flex;justify-content:space-between;align-items:center;font-size:13px;color:var(--ink-soft)}
+.foot-inner a:hover{color:var(--teal-d)}
+
+@media(max-width:860px){
+  .hero-inner{grid-template-columns:1fr}
+  h1{font-size:34px}
+  .problem-grid,.feat-grid,.steps{grid-template-columns:1fr}
+  .nav-links{display:none}
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-inner">
+    <div class="brand"><span class="mark">DM</span>DentMemo</div>
+    <div class="nav-links">
+      <a href="#how">How it works</a>
+      <a href="#features">Features</a>
+      <a href="#faq">FAQ</a>
+    </div>
+    <a class="btn btn-primary" href="https://app.dentmemo.in">Open the app</a>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="wrap hero-inner">
+    <div>
+      <span class="eyebrow">Built for Indian dental clinics</span>
+      <h1>Every patient's history, <em>found in a second.</em></h1>
+      <p class="lead">DentMemo replaces the Excel sheet, the register book, and the WhatsApp photo folder with one place your whole clinic can search — instantly, from any device.</p>
+      <div class="hero-cta">
+        <a class="btn btn-primary" href="https://app.dentmemo.in">Open the app →</a>
+        <a class="btn btn-ghost" href="#how">See how it works</a>
+      </div>
+      <p class="hero-note">Free to try · No card needed · Your data stays yours</p>
+    </div>
+    <div class="demo-card" aria-hidden="true">
+      <div class="demo-head">
+        <span class="demo-dot"></span><span class="demo-dot"></span><span class="demo-dot"></span>
+        <span class="demo-title">SEARCH · PATIENT RECORDS</span>
+      </div>
+      <div class="demo-body">
+        <div class="demo-search">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+          <span class="demo-search-text">Meera Kamat<span class="cursor"></span></span>
+        </div>
+        <div class="demo-result">
+          <div class="demo-result-top">
+            <div>
+              <div class="demo-name">Meera Kamat</div>
+              <div style="font-size:12px;color:var(--ink-soft);margin-top:2px">Age 34 · F · 9820XXXXXX</div>
+            </div>
+            <span class="demo-id mono">P0164</span>
+          </div>
+          <div class="demo-visits">
+            <div class="demo-visit"><span class="t">14 Jun 2026 — Root canal, 26</span><span class="v">₹4,500</span></div>
+            <div class="demo-visit"><span class="t">02 Mar 2026 — Scaling &amp; polishing</span><span class="v">₹1,200</span></div>
+            <div class="demo-visit"><span class="t">19 Nov 2025 — Consultation</span><span class="v">₹300</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<section class="problem">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="eyebrow" style="color:var(--amber);background:rgba(217,164,65,.12);border-color:rgba(217,164,65,.3)">The problem</span>
+      <h2>Your records live in three places. None of them talk to each other.</h2>
+      <p>A patient calls asking about their last visit. Someone starts scrolling through last year's Excel tab, or a photo of a handwritten register, hoping the name rings a bell.</p>
+    </div>
+    <div class="problem-grid">
+      <div class="problem-card">
+        <span class="tag mono">01 · THE SHEET</span>
+        <h3>One giant spreadsheet</h3>
+        <p>Every visit added as a new row, forever. Finding one patient among thousands means scrolling and hoping.</p>
+      </div>
+      <div class="problem-card">
+        <span class="tag mono">02 · THE REGISTER</span>
+        <h3>Handwriting nobody else can read</h3>
+        <p>Only the person who wrote it can find it again — and only if the book is in the room.</p>
+      </div>
+      <div class="problem-card">
+        <span class="tag mono">03 · THE PHONE</span>
+        <h3>Photos of pages, in a chat thread</h3>
+        <p>Scattered across staff phones. Nothing is backed up, nothing is searchable.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="how">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="eyebrow">How it works</span>
+      <h2>Three steps, and you're never searching blind again</h2>
+      <p>No training required — if your staff can use WhatsApp, they can use DentMemo.</p>
+    </div>
+    <div class="steps">
+      <div class="step">
+        <div class="num mono">01</div>
+        <h3>Add the patient once</h3>
+        <p>Name, age, phone. DentMemo gives them a patient ID automatically — no more duplicate entries.</p>
+      </div>
+      <div class="step">
+        <div class="num mono">02</div>
+        <h3>Log each visit as it happens</h3>
+        <p>Diagnosis, treatment, consultant, fees — entered in under a minute, from a phone or a tablet at the chairside.</p>
+      </div>
+      <div class="step">
+        <div class="num mono">03</div>
+        <h3>Search, anytime, from anywhere</h3>
+        <p>Type a name, phone number, or patient ID. Their entire visit history appears — instantly, every time.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="features" id="features">
+  <div class="wrap" style="padding:72px 0">
+    <div class="section-head">
+      <span class="eyebrow">What you get</span>
+      <h2>Built around how a real clinic actually runs</h2>
+    </div>
+    <div class="feat-grid">
+      <div class="feat">
+        <div class="ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg></div>
+        <h3>Instant search</h3>
+        <p>By name, phone, or patient ID. No more flipping pages.</p>
+      </div>
+      <div class="feat">
+        <div class="ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18"/><path d="m19 9-5 5-4-4-3 3"/></svg></div>
+        <h3>Full visit history</h3>
+        <p>Diagnosis, treatment, consultant, and cost — for every visit, on one screen.</p>
+      </div>
+      <div class="feat">
+        <div class="ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18"/></svg></div>
+        <h3>Your own clinic space</h3>
+        <p>Your logo, your colours, your data — private to your clinic and no one else's.</p>
+      </div>
+      <div class="feat">
+        <div class="ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg></div>
+        <h3>A login for your team</h3>
+        <p>Staff sign in with their own account. No shared passwords, no open spreadsheets.</p>
+      </div>
+      <div class="feat">
+        <div class="ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M2 9h20"/></svg></div>
+        <h3>Works on any device</h3>
+        <p>Phone at the front desk, tablet at the chairside, laptop in the office — all in sync.</p>
+      </div>
+      <div class="feat">
+        <div class="ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2 3 7v6c0 5 4 9 9 9s9-4 9-9V7l-9-5z"/></svg></div>
+        <h3>Nothing to lose</h3>
+        <p>Records are backed up automatically — no risk of a lost register or a dropped phone.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="cta">
+  <div class="wrap">
+    <h2>Stop searching. Start finding.</h2>
+    <p>Set up your clinic's space in a few minutes — no card, no commitment.</p>
+    <a class="btn btn-primary" href="https://app.dentmemo.in" style="padding:13px 28px;font-size:15px">Open DentMemo →</a>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap foot-inner">
+    <span>© 2026 DentMemo · Made in Goa</span>
+    <a href="https://app.dentmemo.in">app.dentmemo.in</a>
+  </div>
+</footer>
+
+</body>
+</html>
